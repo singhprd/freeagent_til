@@ -28,7 +28,9 @@ module Tldr
 			desc "#{command}", "Get a TIL about #{command}"
 
 			define_method("#{command}") do |*arguments|
-				first_arg = arguments.first
+				first_arg = arguments[0]
+				second_arg = arguments[1]
+
 				entries_for_area = Tldr::Runner.new.til_entries_for(command)
 
 				if first_arg == "rand" || first_arg.nil?
@@ -36,7 +38,11 @@ module Tldr
 				elsif first_arg == "list"
 					puts entries_for_area
 				elsif entries_for_area.include?(first_arg)
-					puts Tldr::Runner.find(til_area: command, exact_til: first_arg)
+					if second_arg == "--edit"
+						puts "https://github.com/fac/TIL/blob/master/#{command}/#{first_arg}"
+					else
+						puts Tldr::Runner.find(til_area: command, exact_til: first_arg)
+					end
 				end
 			end
 		end

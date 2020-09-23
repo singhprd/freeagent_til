@@ -14,7 +14,12 @@ module Tldr
 	class CLI < Thor
 		desc "rand", "get a random TIL from FreeAgent"
 		def rand
-			puts Tldr::Runner.random_entry
+			puts Tldr::Runner.find
+		end
+
+		desc "update", "update FreeAgent TIL"
+		def update
+			Tldr::Setup.update_cache
 		end
 
 		til_areas = Dir.entries(File.join(REPO_PATH, REPO_NAME)).reject { |folder| REJECT_LIST.include?(folder) }
@@ -27,26 +32,24 @@ module Tldr
 				entries_for_area = Tldr::Runner.new.til_entries_for(command)
 
 				if first_arg == "rand" || first_arg.nil?
-					puts Tldr::Runner.random_entry(til_area: command)
+					puts Tldr::Runner.find(til_area: command)
 				elsif first_arg == "list"
 					puts entries_for_area
 				elsif entries_for_area.include?(first_arg)
-					puts Tldr::Runner.random_entry(til_area: command, exact_til: first_arg)
+					puts Tldr::Runner.find(til_area: command, exact_til: first_arg)
 				end
 			end
 		end
 	end
 
 	class Setup
-		def full_path
-			File.join(REPO_PATH, REPO_NAME)
-		end
-
 		def self.update_cache
-			if Dir.exists?(FULL_PATH)  		
+			full_path = File.join(REPO_PATH, REPO_NAME)
+
+			if Dir.exists?(full_path)  		
 				git = Git.open(full_path)
-				git.fetch
-				git.pull
+				puts git.fetch
+				puts git.pull
 			else
 				Git.clone('git@github.com:fac/TIL.git', REPO_NAME, path: REPO_PATH)
 			end
@@ -54,7 +57,7 @@ module Tldr
 	end
 
 	class Runner
-		def self.random_entry(til_area: nil, exact_til: nil)
+		def self.find(til_area: nil, exact_til: nil)
 			runner = new()
 			til_area ||= runner.til_areas.sample
 			til_snippet ||= runner.til_entries_for(til_area).sample

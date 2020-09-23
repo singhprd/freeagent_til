@@ -13,6 +13,10 @@ module FreeagentTIL
 	class Error < StandardError; end
 
 	class Runner
+		def self.exit_on_failure?
+		  true
+		end
+
 		def self.find(til_area: nil, exact_til: nil)
 			runner = new()
 			til_area ||= runner.til_areas.sample

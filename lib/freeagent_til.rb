@@ -1,23 +1,23 @@
 require "./lib/freeagent_til/version"
 require "git"
-require 'fileutils'
-require 'tty-markdown'
+require "fileutils"
+require "tty-markdown"
 require "thor"
 
 module FreeagentTIL
-	REPO_PATH = File.expand_path('~/.cache/')
+	REPO_PATH = File.expand_path("~/.cache/")
 	REPO_NAME = "freeagent_til"
 	REJECT_LIST = [".", "..", ".git", ".DS_Store"]
 
 	class Error < StandardError; end
 
 	class CLI < Thor
-		desc "rand", "get a random TIL from FreeAgent"
+		desc "rand", "get a random TIL from the FreeAgent TIL repo"
 		def rand
 			puts FreeagentTIL::Runner.find
 		end
 
-		desc "update", "update FreeAgent TIL"
+		desc "update", "update the FreeAgent TIL repo"
 		def update
 			FreeagentTIL::Setup.update_cache
 		end
@@ -59,7 +59,7 @@ module FreeagentTIL
 				puts git.fetch
 				puts git.pull
 			else
-				Git.clone('git@github.com:fac/TIL.git', REPO_NAME, path: REPO_PATH)
+				Git.clone("git@github.com:fac/TIL.git", REPO_NAME, path: REPO_PATH)
 			end
 		end
 	end
@@ -72,8 +72,8 @@ module FreeagentTIL
 
 			path_to_entry = runner.til_entry_for(til_area, til_snippet)
 
-			title = TTY::Markdown.parse("# FreeAgent TIL O'the day: #{til_area} - #{til_snippet}", width: 60)
-			body = TTY::Markdown.parse_file(path_to_entry, width: 60)
+			title = TTY::Markdown.parse("# TIL: #{til_area} - #{til_snippet}")
+			body = TTY::Markdown.parse_file(path_to_entry)
 			return "\n#{title}\n" + body + "\n"
 		end
 

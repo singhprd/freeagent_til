@@ -69,14 +69,6 @@ module Tldr
 			return "\n#{title}\n" + body + "\n"
 		end
 
-		def self.fetch_entry(til_area, til_snippet)
-			path_to_entry = new().til_entry_for(til_area, til_snippet)
-			title = "# FreeAgent TIL O'the day: #{til_area} #{til_snippet}"
-			body = File.open(path_to_entry)
-
-			tty_message(title, body)
-		end
-
 		def full_path
 			File.join(REPO_PATH, REPO_NAME)
 		end

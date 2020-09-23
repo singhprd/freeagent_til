@@ -4,6 +4,6 @@ RSpec.describe Tldr do
   end
 
   it "does something useful" do
-    expect(Tldr::Runner.hello_world).to eq("hello world")
+    expect(Tldr::Runner.fetch_entry).to eq("hello world")
   end
 end

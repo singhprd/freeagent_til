@@ -3,4 +3,4 @@
 # require "lib/tldr"
 require "../tldr/lib/tldr.rb"
 
-Tldr::Runner.hello_world
+puts Tldr::Runner.fetch_entry

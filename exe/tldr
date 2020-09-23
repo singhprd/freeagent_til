@@ -2,4 +2,4 @@
 
 require "../tldr/lib/tldr.rb"
 
-Tldr::CLI.start
+Tldr::CLI.start(ARGV)

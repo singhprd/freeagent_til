@@ -8,7 +8,7 @@ module FreeagentTIL
 	REPO_PATH = File.expand_path("~/.cache/")
 	REPO_NAME = "freeagent_til"
 	GITHUB_REPO_URL = "https://github.com/fac/TIL"
-	REJECT_LIST = [".", "..", ".git", ".DS_Store"]
+	REJECT_LIST = [".", "..", ".git", ".DS_Store", "README.md"]
 
 	class Error < StandardError; end
 
@@ -59,21 +59,38 @@ module FreeagentTIL
 				puts git.fetch
 				puts git.pull
 			else
-				puts Git.clone("git@github.com:fac/TIL.git", FreeagentTIL::REPO_NAME, path: FreeagentTIL::REPO_PATH)
+				puts "cloning the FreeAgent TIL repo into ~/.cache"
+				puts "run freeagent_til update to get new changes"
+
+				Git.clone("git@github.com:fac/TIL.git", FreeagentTIL::REPO_NAME, path: FreeagentTIL::REPO_PATH)
 			end
 		end
 	end
 
 	class CLI < Thor
-		desc "update", "update the FreeAgent TIL repo"
-		def update
-			FreeagentTIL::Setup.update_cache
-		end
+		setup = Dir.exists?(File.join(FreeagentTIL::REPO_PATH, FreeagentTIL::REPO_NAME))
 
-		runner = FreeagentTIL::Runner.new
-		til_areas = runner.til_areas
+		unless setup
+			desc "setup", "setup the FreeAgent TIL CLI"
+			def setup
+				FreeagentTIL::Setup.update_cache
+			end
+		else
+			desc "hidden setup", "setup is complete already", :hide => true
+			def setup
+				puts "you're already setup. Try these commands instead:"
+				puts "freeagent_til"
+				puts "freeagent_til rand"
+			end
 
-		unless til_areas.empty?
+			runner = FreeagentTIL::Runner.new
+			til_areas = runner.til_areas
+			desc "update", "update the FreeAgent TIL repo"
+			def update
+				FreeagentTIL::Setup.update_cache
+			end
+
+
 			desc "rand", "get a random TIL from the FreeAgent TIL repo"
 			def rand
 				puts FreeagentTIL::Runner.find

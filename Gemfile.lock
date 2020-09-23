@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    FreeagentTIL (0.1.0)
+    freeagent_til (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -53,8 +53,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  FreeagentTIL!
   byebug
+  freeagent_til!
   git
   rake (~> 12.0)
   rspec (~> 3.0)

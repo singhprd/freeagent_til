@@ -1,7 +1,7 @@
 require_relative 'lib/freeagent_til/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "FreeagentTIL"
+  spec.name          = "freeagent_til"
   spec.version       = FreeagentTIL::VERSION
   spec.authors       = ["Peter Singh"]
   spec.email         = ["singh.prd@gmail.com"]

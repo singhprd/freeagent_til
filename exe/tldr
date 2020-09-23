@@ -1,3 +1,6 @@
 #!/usr/bin/env ruby
 
-require "tldr"
+# require "lib/tldr"
+require "../tldr/lib/tldr.rb"
+
+Tldr::Runner.hello_world

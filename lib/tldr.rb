@@ -30,9 +30,9 @@ module Tldr
 	  def self.fetch_entry(til_area, til_snippet)
 	  	path_to_entry = new().til_entry_for(til_area, til_snippet)
 
-	  	title = TTY::Markdown.parse("# FreeAgent TIL O'the day: Spotlight")
+	  	title = TTY::Markdown.parse("# FreeAgent TIL O'the day: #{til_snippet}")
 	  	parsed = TTY::Markdown.parse_file(path_to_entry)
-	  	return "-------\n\n#{title}\n\n" + parsed + "\n-------\n\n"
+	  	return "\n\n#{title}\n\n" + parsed + "\n\n"
 	  end
 
   	def full_path

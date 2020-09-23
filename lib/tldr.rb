@@ -8,7 +8,6 @@ module Tldr
   REPO_NAME = "freeagent_til"
   REJECT_LIST = [".", "..", ".git"]
 
-
   class Error < StandardError; end
 
   class Setup
@@ -18,9 +17,9 @@ module Tldr
 
   	def self.update_cache
 			if Dir.exists?(FULL_PATH)  		
-				g = Git.open(full_path)
-				g.fetch
-				g.pull
+				git = Git.open(full_path)
+				git.fetch
+				git.pull
 			else
   			Git.clone('git@github.com:fac/TIL.git', REPO_NAME, path: REPO_PATH)
 			end

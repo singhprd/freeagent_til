@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in tldr.gemspec
+# Specify your gem's dependencies in freeagent_til.gemspec
 gemspec
 
 gem "rake", "~> 12.0"

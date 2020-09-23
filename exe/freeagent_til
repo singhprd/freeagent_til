@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "/Users/peter/dev/tldr/lib/freeagent_til.rb"
+
+FreeagentTIL::CLI.start(ARGV)

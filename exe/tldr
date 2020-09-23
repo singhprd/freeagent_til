@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "../tldr/lib/tldr.rb"
-
-Tldr::CLI.start(ARGV)

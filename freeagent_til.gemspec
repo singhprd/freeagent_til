@@ -1,14 +1,14 @@
-require_relative 'lib/tldr/version'
+require_relative 'lib/freeagent_til/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "tldr"
-  spec.version       = Tldr::VERSION
+  spec.name          = "FreeagentTIL"
+  spec.version       = FreeagentTIL::VERSION
   spec.authors       = ["Peter Singh"]
   spec.email         = ["singh.prd@gmail.com"]
 
   spec.summary       = %q{Write a short summary, because RubyGems requires one.}
   spec.description   = %q{Write a longer description or delete this line.}
-  spec.homepage      = "https://github.com/singhprd/tldr"
+  spec.homepage      = "https://github.com/singhprd/freeagent_til"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 

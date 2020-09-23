@@ -36,6 +36,7 @@ GEM
       unicode-display_width (~> 1.5)
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
+    thor (1.0.1)
     tty-color (0.5.2)
     tty-markdown (0.7.0)
       kramdown (>= 1.16.2, < 3.0)
@@ -56,6 +57,7 @@ DEPENDENCIES
   git
   rake (~> 12.0)
   rspec (~> 3.0)
+  thor
   tldr!
   tty-markdown
 

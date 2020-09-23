@@ -2,13 +2,21 @@ require "./lib/tldr/version"
 require "git"
 require 'fileutils'
 require 'tty-markdown'
+require "thor"
 
 module Tldr
   REPO_PATH = File.expand_path('~/.cache/')
   REPO_NAME = "freeagent_til"
-  REJECT_LIST = [".", "..", ".git"]
+  REJECT_LIST = [".", "..", ".git", ".DS_Store"]
 
   class Error < StandardError; end
+
+  class CLI < Thor
+  	desc "rand", "get a random TIL from FreeAgent"
+  	def rand
+  		puts Tldr::Runner.random_entry
+  	end
+  end
 
   class Setup
 	  def full_path
@@ -27,12 +35,23 @@ module Tldr
   end
 
   class Runner
+  	def self.random_entry
+  		runner = new()
+  		til_area = runner.til_areas.sample
+  		til_snippet = runner.til_entries_for(til_area).sample
+
+  		path_to_entry = runner.til_entry_for(til_area, til_snippet)
+
+  		title = TTY::Markdown.parse("# FreeAgent TIL O'the day: #{til_snippet}", width: 60)
+  		body = TTY::Markdown.parse_file(path_to_entry, width: 60)
+  		return "\n#{title}\n" + body + "\n"
+  	end
+
 	  def self.fetch_entry(til_area, til_snippet)
 	  	path_to_entry = new().til_entry_for(til_area, til_snippet)
-
-	  	title = TTY::Markdown.parse("# FreeAgent TIL O'the day: #{til_snippet}")
-	  	parsed = TTY::Markdown.parse_file(path_to_entry)
-	  	return "\n\n#{title}\n\n" + parsed + "\n\n"
+	  	title = "# FreeAgent TIL O'the day: #{til_snippet}"
+	  	body = File.open(path_to_entry)
+	  	TTY::Markdown.parse(title + body, width: 70)
 	  end
 
   	def full_path
@@ -43,11 +62,20 @@ module Tldr
 	  	Dir.entries(full_path).reject { |folder| REJECT_LIST.include?(folder) }
 	  end
 
-	  def til_entry_for(til_area, til_snippet)
-	  	entries = Dir.entries(File.join(full_path, til_area)).reject { |folder| REJECT_LIST.include?(folder) }
+	  def til_entries_for(til_area)
+	  	path = File.join(full_path, til_area)
+	  	Dir.entries(path).reject { |folder| REJECT_LIST.include?(folder) }
+	  end
 
+	  def til_entry_for(til_area, til_snippet)
 	  	path_to_entry = File.join(full_path, til_area, til_snippet)
 	  	path_to_entry
+	  end
+
+	  def entries_for_area
+	  	Dir.entries(File.join(full_path, til_area)).reject do |folder|
+	  		REJECT_LIST.include?(folder)
+	  	end
 	  end
   end
 end

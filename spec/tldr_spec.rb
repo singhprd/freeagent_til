@@ -14,7 +14,7 @@ RSpec.describe Tldr do
   it "does something useful" do
   	output = Tldr::Runner.fetch_entry("example_area", "example_til.md")
 
-    expect(output).to include "FreeAgent TIL O’the day: Spotlight"
+    expect(output).to include "FreeAgent TIL O’the day: example_til.md"
     expect(output).to include "An example TIL entry"
     expect(output).to include "This contains lots of useful information!"
   end

@@ -35,6 +35,8 @@ module FreeagentTIL
 
 				if first_arg == "rand" || first_arg.nil?
 					puts FreeagentTIL::Runner.find(til_area: command)
+				elsif first_arg == "--edit"
+					puts "https://github.com/fac/TIL/blob/master/#{command}"
 				elsif first_arg == "list"
 					puts entries_for_area
 				elsif entries_for_area.include?(first_arg)

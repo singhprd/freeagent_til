@@ -30,6 +30,7 @@ module FreeagentTIL
 		end
 
 		def til_areas
+			return [] if !Dir.exists?(full_path)
 			Dir.entries(full_path).reject { |folder| REJECT_LIST.include?(folder) }
 		end
 
@@ -51,24 +52,19 @@ module FreeagentTIL
 
 	class Setup
 		def self.update_cache
-			full_path = File.join(REPO_PATH, REPO_NAME)
+			full_path = File.join(FreeagentTIL::REPO_PATH, FreeagentTIL::REPO_NAME)
 
 			if Dir.exists?(full_path)
 				git = Git.open(full_path)
 				puts git.fetch
 				puts git.pull
 			else
-				puts Git.clone("git@github.com:fac/TIL.git", REPO_NAME, path: REPO_PATH)
+				puts Git.clone("git@github.com:fac/TIL.git", FreeagentTIL::REPO_NAME, path: FreeagentTIL::REPO_PATH)
 			end
 		end
 	end
 
 	class CLI < Thor
-		desc "rand", "get a random TIL from the FreeAgent TIL repo"
-		def rand
-			puts FreeagentTIL::Runner.find
-		end
-
 		desc "update", "update the FreeAgent TIL repo"
 		def update
 			FreeagentTIL::Setup.update_cache
@@ -77,29 +73,35 @@ module FreeagentTIL
 		runner = FreeagentTIL::Runner.new
 		til_areas = runner.til_areas
 
+		unless til_areas.empty?
+			desc "rand", "get a random TIL from the FreeAgent TIL repo"
+			def rand
+				puts FreeagentTIL::Runner.find
+			end
 
-		til_areas.each do |command|
-			desc "#{command}", "Get a TIL about #{command}"
+			til_areas.each do |command|
+				desc "#{command}", "Get a TIL about #{command}"
 
-			define_method("#{command}") do |*arguments|
-				first_arg = arguments[0]
-				second_arg = arguments[1]
+				define_method("#{command}") do |*arguments|
+					first_arg = arguments[0]
+					second_arg = arguments[1]
 
-				entries_for_area = runner.til_entries_for(command)
+					entries_for_area = runner.til_entries_for(command)
 
-				if first_arg == "rand" || first_arg.nil?
-					puts FreeagentTIL::Runner.find(til_area: command)
-				elsif first_arg == "--edit"
-					puts GITHUB_REPO_URL + "/blob/master/#{command}"
-				elsif first_arg == "--new"
-					puts GITHUB_REPO_URL + "/new/master/#{command}"
-				elsif first_arg == "list"
-					puts entries_for_area
-				elsif entries_for_area.include?(first_arg)
-					if second_arg == "--edit"
-						puts GITHUB_REPO_URL + "/blob/master/#{command}/#{first_arg}"
-					else
-						puts FreeagentTIL::Runner.find(til_area: command, exact_til: first_arg)
+					if first_arg == "rand" || first_arg.nil?
+						puts FreeagentTIL::Runner.find(til_area: command)
+					elsif first_arg == "--edit"
+						puts GITHUB_REPO_URL + "/blob/master/#{command}"
+					elsif first_arg == "--new"
+						puts GITHUB_REPO_URL + "/new/master/#{command}"
+					elsif first_arg == "list"
+						puts entries_for_area
+					elsif entries_for_area.include?(first_arg)
+						if second_arg == "--edit"
+							puts GITHUB_REPO_URL + "/blob/master/#{command}/#{first_arg}"
+						else
+							puts FreeagentTIL::Runner.find(til_area: command, exact_til: first_arg)
+						end
 					end
 				end
 			end

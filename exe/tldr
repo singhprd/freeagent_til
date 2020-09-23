@@ -3,4 +3,4 @@
 # require "lib/tldr"
 require "../tldr/lib/tldr.rb"
 
-puts Tldr::Runner.fetch_entry
+puts Tldr::Runner.fetch_entry("git", "patch-dates.md")
